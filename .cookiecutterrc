@@ -1,0 +1,64 @@
+# This file exists so you can easily regenerate your project.
+#
+# `cookiepatcher` is a convenient shim around `cookiecutter`
+# for regenerating projects (it will generate a .cookiecutterrc
+# automatically for any template). To use it:
+#
+#    pip install cookiepatcher
+#    cookiepatcher gh:ionelmc/cookiecutter-pylibrary project-path
+#
+# See:
+#    https://pypi.org/project/cookiepatcher
+#
+# Alternatively, you can run:
+#
+#    cookiecutter --overwrite-if-exists --config-file=project-path/.cookiecutterrc gh:ionelmc/cookiecutter-pylibrary
+
+default_context:
+
+    _extensions:               ['jinja2_time.TimeExtension']
+    _template:                 'gh:ionelmc/cookiecutter-pylibrary'
+    appveyor:                  'yes'
+    c_extension_function:      'longest'
+    c_extension_module:        '_pycollect'
+    c_extension_optional:      'no'
+    c_extension_support:       'no'
+    c_extension_test_pypi:     'no'
+    c_extension_test_pypi_appveyor_secret: 'tr8SvGzg7MFFID7JWeddiA=='
+    c_extension_test_pypi_travis_secret: '# The password should be set in https://travis-ci.org/allrod5/pycollect/settings\n    # Alternatively you can run this shell oneliner if you got travis gem installed:\n    #\n    #   echo -n "Password:"; (read -s p; echo -n TWINE_PASSWORD=$p) | travis encrypt --add=env.global --repo=allrod5/pycollect'
+    c_extension_test_pypi_username: 'allrod5'
+    codacy:                    'no'
+    codacy_projectid:          '[Get ID from https://app.codacy.com/app/allrod5/pycollect/settings]'
+    codeclimate:               'no'
+    codecov:                   'no'
+    command_line_interface:    'no'
+    command_line_interface_bin_name: 'pycollect'
+    coveralls:                 'yes'
+    coveralls_token:           'Rsg83L8JM1bKgAlfjPkDhF3ysNTtEMTac'
+    distribution_name:         'pycollect'
+    email:                     'allrod5@hotmail.com'
+    full_name:                 'Rodrigo Martins de Oliveira'
+    landscape:                 'no'
+    license:                   'MIT license'
+    linter:                    'flake8'
+    package_name:              'pycollect'
+    project_name:              'pycollect'
+    project_short_description: 'Utility library for collection valid Python files recursively'
+    release_date:              'today'
+    repo_hosting:              'github'
+    repo_name:                 'pycollect'
+    repo_username:             'allrod5'
+    requiresio:                'yes'
+    scrutinizer:               'no'
+    sphinx_docs:               'yes'
+    sphinx_doctest:            'yes'
+    sphinx_theme:              'sphinx-py3doc-enhanced-theme'
+    test_matrix_configurator:  'yes'
+    test_matrix_separate_coverage: 'yes'
+    test_runner:               'pytest'
+    test_runner_setup_requires: 'no'
+    travis:                    'yes'
+    version:                   '0.0.0'
+    website:                   'https://github.com/allrod5'
+    year_from:                 '2019'
+    year_to:                   '2019'
