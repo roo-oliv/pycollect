@@ -10,22 +10,18 @@ Overview
     * - docs
       - |docs|
     * - tests
-      - | |travis| |appveyor| |requires|
+      - | |drone| |requires|
         | |coveralls|
     * - package
       - | |version| |wheel| |supported-versions| |supported-implementations|
         | |commits-since|
-.. |docs| image:: https://readthedocs.org/projects/pycollect/badge/?style=flat
-    :target: https://readthedocs.org/projects/pycollect
+.. |docs| image:: https://img.shields.io/badge/docs-GitHub%20Pages-black
+    :target: https://allrod5.github.io/pycollect/
     :alt: Documentation Status
 
-.. |travis| image:: https://travis-ci.org/allrod5/pycollect.svg?branch=master
-    :alt: Travis-CI Build Status
-    :target: https://travis-ci.org/allrod5/pycollect
-
-.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/github/allrod5/pycollect?branch=master&svg=true
-    :alt: AppVeyor Build Status
-    :target: https://ci.appveyor.com/project/allrod5/pycollect
+.. |drone| image:: https://cloud.drone.io/api/badges/allrod5/pycollect/status.svg
+    :alt: Drone-CI Build Status
+    :target: https://cloud.drone.io/allrod5/pycollect
 
 .. |requires| image:: https://requires.io/github/allrod5/pycollect/requirements.svg?branch=master
     :alt: Requirements Status
@@ -73,7 +69,7 @@ Documentation
 =============
 
 
-https://pycollect.readthedocs.io/
+https://allrod5.github.io/pycollect/
 
 
 Development
@@ -81,21 +77,4 @@ Development
 
 To run the all tests run::
 
-    tox
-
-Note, to combine the coverage data from all the tox environments run:
-
-.. list-table::
-    :widths: 10 90
-    :stub-columns: 1
-
-    - - Windows
-      - ::
-
-            set PYTEST_ADDOPTS=--cov-append
-            tox
-
-    - - Other
-      - ::
-
-            PYTEST_ADDOPTS=--cov-append tox
+    make tests

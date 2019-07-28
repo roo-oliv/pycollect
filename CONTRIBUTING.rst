@@ -68,23 +68,12 @@ If you need some code review or feedback while you're developing the code just m
 
 For merging, you should:
 
-1. Include passing tests (run ``tox``) [1]_.
+1. Include passing tests (run ``make tests``) [1]_.
 2. Update documentation when there's new API, functionality etc.
 3. Add a note to ``CHANGELOG.rst`` about the changes.
 4. Add yourself to ``AUTHORS.rst``.
 
-.. [1] If you don't have all the necessary python versions available locally you can rely on Travis - it will
-       `run the tests <https://travis-ci.org/allrod5/pycollect/pull_requests>`_ for each change you add in the pull request.
+.. [1] If you don't have all the necessary python versions available locally you can rely on Drone - it will
+       `run the tests <https://cloud.drone.io/allrod5/pycollect>`_ for each change you add in the pull request.
 
        It will be slower though ...
-
-Tips
-----
-
-To run a subset of tests::
-
-    tox -e envname -- pytest -k test_myfeature
-
-To run all the test environments in *parallel* (you need to ``pip install detox``)::
-
-    detox

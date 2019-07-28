@@ -1,77 +1,35 @@
-language: python
-dist: xenial
-env:
-  global:
-    - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
-    - SEGFAULT_SIGNALS=all
 matrix:
   include:
-    - python: '3.6'
-      env:
-        - TOXENV=check
-    - python: '3.6'
-      env:
-        - TOXENV=docs
-    - env:
-        - TOXENV=py27-cover,coveralls
-      python: '2.7'
-    - env:
-        - TOXENV=py27-nocov
-      python: '2.7'
-    - env:
-        - TOXENV=py34-cover,coveralls
-      python: '3.4'
-    - env:
-        - TOXENV=py34-nocov
-      python: '3.4'
-    - env:
-        - TOXENV=py35-cover,coveralls
-      python: '3.5'
-    - env:
-        - TOXENV=py35-nocov
-      python: '3.5'
-    - env:
-        - TOXENV=py36-cover,coveralls
-      python: '3.6'
-    - env:
-        - TOXENV=py36-nocov
-      python: '3.6'
-    - env:
-        - TOXENV=py37-cover,coveralls
-      python: '3.7'
-    - env:
-        - TOXENV=py37-nocov
-      python: '3.7'
-    - env:
-        - TOXENV=pypy-cover,coveralls
-      python: 'pypy2.7-6.0'
-    - env:
-        - TOXENV=pypy-nocov
-      python: 'pypy2.7-6.0'
-    - env:
-        - TOXENV=pypy3-cover,coveralls
-        - TOXPYTHON=pypy3
-      python: 'pypy3.5-6.0'
-    - env:
-        - TOXENV=pypy3-nocov
-        - TOXPYTHON=pypy3
-      python: 'pypy3.5-6.0'
+    - name: "Python 3.7 on Xenial Linux"
+      python: 3.7
+      dist: xenial
+    - name: "Python 3.7 on macOS"
+      os: osx
+      osx_image: xcode10.2
+      language: shell  # 'language: python' is an error on Travis CI macOS
+    - name: "Python 3.7 on Windows"
+      os: windows  # Windows 10.0.17134 N/A Build 17134
+      language: shell  # 'language: python' is an error on Travis CI Windows
+      before_install:
+        - choco install python
+        - python -m pip install --upgrade pip
+      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+python:
+    - "3.5"
+    - "3.6"
+    - "3.7"
+    - "pypy3.5"
+    - "pypy3.6"
+    - "pypy3.7"
 before_install:
-  - python --version
-  - uname -a
-  - lsb_release -a
+    - python --version
+    - uname -a
+    - lsb_release -a
 install:
-  - pip install tox
-  - virtualenv --version
-  - easy_install --version
-  - pip --version
-  - tox --version
+    - make requirements
 script:
-  - tox -v
-after_failure:
-  - more .tox/log/* | cat
-  - more .tox/*/log/* | cat
+    - make tests
 notifications:
-  email:
-    on_success: never
-    on_failure: always
+    email:
+        on_success: never
+        on_failure: always
