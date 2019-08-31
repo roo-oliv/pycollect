@@ -13,7 +13,9 @@ def test_example_module_with_default_configurations(enable_regex_patterns: bool)
         enable_regex_patterns=enable_regex_patterns
     )
     search_path = os.path.join(
-        re.sub("{0}/(?:.(?!{0}/))+$".format("integration"), "", __file__),
+        re.sub(
+            "{0}\\{1}(?:.(?!{0}\\{1}))+$".format("integration", os.sep), "", __file__
+        ),
         "resources",
         "example_module",
     )
