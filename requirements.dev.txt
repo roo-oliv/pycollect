@@ -4,3 +4,5 @@ docutils==0.15.2
 flake8==3.7.8
 pytest==5.0.1
 pytest-cov==2.7.1
+sphinx==2.2.0
+sphinx_py3doc_enhanced_theme==2.4.0

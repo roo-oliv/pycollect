@@ -50,6 +50,22 @@ clean:  ## delete all compiled python files
 	find . -name "*~" -delete
 	find . -name "__pycache__" -delete
 
+.PHONY: github
+github:
+	make html
+	cp -a build/html/. docs
+
+SPHINXOPTS    =
+SPHINXBUILD   = sphinx-build
+SOURCEDIR     = docs
+BUILDDIR      = build
+
+.PHONY: Makefile
+# Catch-all target: route all unknown targets to Sphinx using the new
+# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
+%: Makefile
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
 .DEFAULT_GOAL := help
 
 # Inspired by <http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html>
