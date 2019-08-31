@@ -10,7 +10,7 @@ Overview
     * - docs
       - |docs|
     * - tests
-      - | |drone| |requires|
+      - | |build| |requires|
         | |coveralls|
     * - package
       - | |version| |wheel| |supported-versions| |supported-implementations|
@@ -19,9 +19,9 @@ Overview
     :target: https://allrod5.github.io/pycollect/
     :alt: Documentation Status
 
-.. |drone| image:: https://cloud.drone.io/api/badges/allrod5/pycollect/status.svg
-    :alt: Drone-CI Build Status
-    :target: https://cloud.drone.io/allrod5/pycollect
+.. |build| image:: [![Build Status](https://github.com/allrod5/pycollect/workflows/build/badge.svg)]
+    :alt: Build Status
+    :target: https://github.com/allrod5/pycollect/actions
 
 .. |requires| image:: https://requires.io/github/allrod5/pycollect/requirements.svg?branch=master
     :alt: Requirements Status
