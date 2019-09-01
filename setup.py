@@ -24,7 +24,7 @@ def read(*names, **kwargs):
 
 setup(
     name="pycollect",
-    version="0.0.0",
+    version="0.0.1",
     license="MIT license",
     description="Utility library for collection valid Python files recursively",
     long_description="%s\n%s"
