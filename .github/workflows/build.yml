@@ -1,6 +1,6 @@
 name: build
 
-on: [push]
+on: [ push, release ]
 
 jobs:
   tests:
@@ -31,3 +31,13 @@ jobs:
     - name: Run tests with pytest
       run: |
         make tests
+    - name: Make package
+      run: |
+        make package
+    - name: Publish release
+      if: github.event_name == 'release'
+      uses: mariamrf/py-package-publish-action@v0.0.2
+      env:
+        PYTHON_VERSION: 3.7
+        TWINE_USERNAME: ${{ secrets.pypi_username }}
+        TWINE_PASSWORD: ${{ secrets.pypi_password }}
