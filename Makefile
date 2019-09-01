@@ -44,14 +44,12 @@ tests:  ## run tests with pytest
 .PHONY: checks
 checks: black-check flake-check  ## perform code standards and style checks
 
-.PHONY: clean
-clean:  ## delete all compiled python files
-	find . -name "*.py[co]" -delete
-	find . -name "*~" -delete
-	find . -name "__pycache__" -delete
+.PHONY: package
+package:
+	pyton setup.py sdist
 
-.PHONY: github
-github:
+.PHONY: github-pages
+github-pages:
 	make html
 	cp -a build/html/. docs
 
@@ -65,6 +63,12 @@ BUILDDIR      = build
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+.PHONY: clean
+clean:  ## delete all compiled python files
+	find . -name "*.py[co]" -delete
+	find . -name "*~" -delete
+	find . -name "__pycache__" -delete
 
 .DEFAULT_GOAL := help
 
