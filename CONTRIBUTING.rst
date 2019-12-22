@@ -49,9 +49,17 @@ To set up `pycollect` for local development:
 
    Now you can make your changes locally.
 
-4. When you're done making changes, run all the checks, doc builder and spell checker with `tox <http://tox.readthedocs.io/en/latest/install.html>`_ one command::
+4. Create a virtual environment and install the project's dependencies::
 
-    tox
+    make environment
+    make requirements
+
+5. When you're done making changes, run black, all the checks and tests, doc builder and spell checker with ``make`` commands::
+
+    make black
+    make checks
+    make tests
+    make github-pages
 
 5. Commit your changes and push your branch to GitHub::
 
@@ -73,7 +81,7 @@ For merging, you should:
 3. Add a note to ``CHANGELOG.rst`` about the changes.
 4. Add yourself to ``AUTHORS.rst``.
 
-.. [1] If you don't have all the necessary python versions available locally you can rely on Drone - it will
-       `run the tests <https://cloud.drone.io/allrod5/pycollect>`_ for each change you add in the pull request.
+.. [1] If you don't have all the necessary python versions available locally you can rely on GitHub Actions - it will
+       `run the tests <https://github.com/allrod5/pycollect/actions>`_ for each change you add in the pull request.
 
-       It will be slower though ...
+       It will be slower though...
