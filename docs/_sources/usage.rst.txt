@@ -4,4 +4,7 @@ Usage
 
 To use pycollect in a project::
 
-	import pycollect
+    from pycollect import PythonFileCollector
+
+    file_collector = PythonFileCollector()
+    files = file_collector.collect()
