@@ -49,7 +49,7 @@
 <span></span><span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
 
 
 <div class="viewcode-block" id="PythonFileCollector"><a class="viewcode-back" href="../../reference/pycollect.html#pycollect.PythonFileCollector">[docs]</a><span class="k">class</span> <span class="nc">PythonFileCollector</span><span class="p">:</span>
@@ -59,11 +59,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_WILDCARD</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span>
+    <span class="n">_NEGATION</span> <span class="o">=</span> <span class="s2">&quot;!&quot;</span>
     <span class="n">_INIT_FILE</span> <span class="o">=</span> <span class="s2">&quot;__init__.py&quot;</span>
-    <span class="n">_DEFAULT_FILE_INCLUSION_PATTERNS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;*.py&quot;</span><span class="p">]</span>
-    <span class="n">_DEFAULT_FILE_EXCLUSION_PATTERNS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;.*&quot;</span><span class="p">,</span> <span class="s2">&quot;~*&quot;</span><span class="p">]</span>
-    <span class="n">_DEFAULT_DIR_INCLUSION_PATTERNS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">]</span>
-    <span class="n">_DEFAULT_DIR_EXCLUSION_PATTERNS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">_DEFAULT_FILE_EXCLUSION_PATTERNS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;!*.py&quot;</span><span class="p">,</span> <span class="s2">&quot;.*&quot;</span><span class="p">,</span> <span class="s2">&quot;~*&quot;</span><span class="p">}</span>
+    <span class="n">_DEFAULT_DIR_EXCLUSION_PATTERNS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;__pycache__&quot;</span><span class="p">,</span>
         <span class="s2">&quot;tmp&quot;</span><span class="p">,</span>
         <span class="s2">&quot;build&quot;</span><span class="p">,</span>
@@ -80,11 +79,9 @@
         <span class="s2">&quot;pyvenv*&quot;</span><span class="p">,</span>
         <span class="s2">&quot;.*&quot;</span><span class="p">,</span>
         <span class="s2">&quot;*~&quot;</span><span class="p">,</span>
-    <span class="p">]</span>
-    <span class="n">_DEFAULT_FILE_INCLUSION_REGEX_PATTERNS</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;.*\.py(?!.)&quot;</span><span class="p">]</span>
-    <span class="n">_DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;^\..*&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;^\~.*&quot;</span><span class="p">]</span>
-    <span class="n">_DEFAULT_DIR_INCLUSION_REGEX_PATTERNS</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s2">&quot;.*&quot;</span><span class="p">]</span>
-    <span class="n">_DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">}</span>
+    <span class="n">_DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS</span> <span class="o">=</span> <span class="p">{</span><span class="sa">r</span><span class="s2">&quot;(?!(.*\.py(?!.)))&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;^\..*&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;^\~.*&quot;</span><span class="p">}</span>
+    <span class="n">_DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="sa">r</span><span class="s2">&quot;^__pycache__(?!.)&quot;</span><span class="p">,</span>
         <span class="sa">r</span><span class="s2">&quot;^tmp(?!.)&quot;</span><span class="p">,</span>
         <span class="sa">r</span><span class="s2">&quot;^build(?!.)&quot;</span><span class="p">,</span>
@@ -101,45 +98,59 @@
         <span class="sa">r</span><span class="s2">&quot;^pyvenv.*&quot;</span><span class="p">,</span>
         <span class="sa">r</span><span class="s2">&quot;^\..*&quot;</span><span class="p">,</span>
         <span class="sa">r</span><span class="s2">&quot;.*~(?!.)&quot;</span><span class="p">,</span>
-    <span class="p">]</span>
+    <span class="p">}</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">enable_regex_patterns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">file_inclusion_patterns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">file_exclusion_patterns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">dir_inclusion_patterns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">dir_exclusion_patterns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">use_regex_patterns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">additional_file_exclusion_patterns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">additional_dir_exclusion_patterns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_enable_regex_patterns</span> <span class="o">=</span> <span class="n">enable_regex_patterns</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_file_inclusion_patterns</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">file_inclusion_patterns</span>
-            <span class="k">if</span> <span class="n">file_inclusion_patterns</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_FILE_INCLUSION_PATTERNS</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enable_regex_patterns</span>
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_FILE_INCLUSION_REGEX_PATTERNS</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_file_exclusion_patterns</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">file_exclusion_patterns</span>
-            <span class="k">if</span> <span class="n">file_exclusion_patterns</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_FILE_EXCLUSION_PATTERNS</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enable_regex_patterns</span>
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dir_inclusion_patterns</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">dir_inclusion_patterns</span>
-            <span class="k">if</span> <span class="n">dir_inclusion_patterns</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_DIR_INCLUSION_PATTERNS</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enable_regex_patterns</span>
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_DIR_INCLUSION_REGEX_PATTERNS</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dir_exclusion_patterns</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">dir_exclusion_patterns</span>
-            <span class="k">if</span> <span class="n">dir_exclusion_patterns</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_DIR_EXCLUSION_PATTERNS</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enable_regex_patterns</span>
-            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS</span>
-        <span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        PythonFileCollector provides method &quot;collect&quot; to collect files</span>
+<span class="sd">        while applying exclusion patterns to files and directories based exclusively on</span>
+<span class="sd">        their names and NOT taking into account their absolute nor relative paths.</span>
+
+<span class="sd">        When not using regex pattern a single wildcard, &quot;*&quot;, can be used anywhere in</span>
+<span class="sd">        a pattern to filter names &quot;starting with&quot; and/or &quot;ending with&quot;. Also, a single</span>
+<span class="sd">        exclamation mark, &quot;!&quot;, can be used at the beginning of the pattern to negate it.</span>
+<span class="sd">        These only applies when :param use_regex_patterns: is False.</span>
+
+<span class="sd">        Notice that using regex patterns may be slower.</span>
+
+<span class="sd">        :param use_regex_patterns:</span>
+<span class="sd">            (default: False) flag to indicate whether or not to use regex to match</span>
+<span class="sd">            patterns. When this flag it set to False the PythonFileCollector._WILDCARD</span>
+<span class="sd">            (default: &quot;*&quot;) character is interpreted as wildcard and patterns starting</span>
+<span class="sd">            with the PythonFileCollector._NEGATION (default: &quot;!&quot;) character are negated.</span>
+<span class="sd">        :param additional_file_exclusion_patterns:</span>
+<span class="sd">            (default: None) additional patterns to filter out of collection files. In</span>
+<span class="sd">            addition to the PythonFileCollector._DEFAULT_FILE_EXCLUSION_PATTERNS or</span>
+<span class="sd">            PythonFileCollector._DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS any file that</span>
+<span class="sd">            matches these patterns will be excluded from collection.</span>
+<span class="sd">        :param additional_dir_exclusion_patterns:</span>
+<span class="sd">            (default: None) additional patterns to filter out of collection directories.</span>
+<span class="sd">            In addition to the PythonFileCollector._DEFAULT_DIR_EXCLUSION_PATTERNS or</span>
+<span class="sd">            PythonFileCollector._DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS any directory that</span>
+<span class="sd">            matches these patterns will be excluded from collection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enable_regex_patterns</span> <span class="o">=</span> <span class="n">use_regex_patterns</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_regex_patterns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_exclusion_patterns</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dir_exclusion_patterns</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_exclusion_patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_FILE_EXCLUSION_PATTERNS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dir_exclusion_patterns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_DIR_EXCLUSION_PATTERNS</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">additional_file_exclusion_patterns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_exclusion_patterns</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">additional_file_exclusion_patterns</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">additional_dir_exclusion_patterns</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dir_exclusion_patterns</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">additional_dir_exclusion_patterns</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_get_caller_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -147,32 +158,32 @@
         <span class="n">caller_abs_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">caller_filename</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">caller_abs_path</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">collect_python_files</span><span class="p">(</span>
+    <span class="k">def</span> <span class="nf">collect</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">search_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">recursion_limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">follow_symlinks</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">DirEntry</span><span class="p">]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">DirEntry</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">search_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">search_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_caller_path</span><span class="p">()</span>
 
-        <span class="n">collected_files</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># type: List[os.DirEntry]</span>
-        <span class="n">excluded_files</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># type: List[os.DirEntry]</span>
-        <span class="n">collected_dirs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># type: List[os.DirEntry]</span>
-        <span class="n">excluded_dirs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># type: List[os.DirEntry]</span>
+        <span class="n">collected_files</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1"># type: Set[os.DirEntry]</span>
+        <span class="n">excluded_files</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1"># type: Set[os.DirEntry]</span>
+        <span class="n">collected_dirs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1"># type: Set[os.DirEntry]</span>
+        <span class="n">excluded_dirs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>  <span class="c1"># type: Set[os.DirEntry]</span>
 
         <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">search_path</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">is_file</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_exclude_file</span><span class="p">(</span><span class="n">entry</span><span class="p">):</span>
-                    <span class="n">excluded_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                    <span class="n">excluded_files</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
                     <span class="k">continue</span>
-                <span class="n">collected_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                <span class="n">collected_files</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">is_dir</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_should_exclude_dir</span><span class="p">(</span><span class="n">entry</span><span class="p">):</span>
-                    <span class="n">excluded_dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                    <span class="n">excluded_dirs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
                     <span class="k">continue</span>
-                <span class="n">collected_dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+                <span class="n">collected_dirs</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
                 <span class="k">continue</span>
 
         <span class="k">if</span> <span class="n">recursion_limit</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">recursion_limit</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -185,10 +196,12 @@
                     <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">subdir</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
                 <span class="p">):</span>
                     <span class="k">continue</span>
-                <span class="n">collected_files</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collect_python_files</span><span class="p">(</span>
-                    <span class="n">search_path</span><span class="o">=</span><span class="n">subdir</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
-                    <span class="n">recursion_limit</span><span class="o">=</span><span class="n">recursion_limit</span><span class="p">,</span>
-                    <span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">,</span>
+                <span class="n">collected_files</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span>
+                        <span class="n">search_path</span><span class="o">=</span><span class="n">subdir</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>
+                        <span class="n">recursion_limit</span><span class="o">=</span><span class="n">recursion_limit</span><span class="p">,</span>
+                        <span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">,</span>
+                    <span class="p">)</span>
                 <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">collected_files</span>
@@ -197,27 +210,26 @@
         <span class="n">filename</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># type: str</span>
         <span class="k">return</span> <span class="nb">any</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_matches_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file_exclusion_patterns</span>
-        <span class="p">)</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">(</span>
-            <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matches_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file_inclusion_patterns</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_exclusion_patterns</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_should_exclude_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">DirEntry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="n">dirname</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># type: str</span>
         <span class="k">return</span> <span class="nb">any</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_matches_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">dirname</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir_exclusion_patterns</span>
-        <span class="p">)</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">(</span>
-            <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matches_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">dirname</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir_inclusion_patterns</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir_exclusion_patterns</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_matches_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enable_regex_patterns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_regex_patterns</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+        <span class="n">negate</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_NEGATION</span><span class="p">):</span>
+            <span class="n">negate</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">pattern</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
         <span class="n">splitted</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_WILDCARD</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">splitted</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">splitted</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div>
+        <span class="n">matches_pattern</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">splitted</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">splitted</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">matches_pattern</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">negate</span> <span class="k">else</span> <span class="ow">not</span> <span class="n">matches_pattern</span></div>
 </pre></div>
 
           </div>
@@ -266,7 +278,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Rodrigo Martins de Oliveira.
-      Last updated on Aug 31, 2019.
+      Last updated on Dec 22, 2019.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>

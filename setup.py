@@ -24,9 +24,9 @@ def read(*names, **kwargs):
 
 setup(
     name="pycollect",
-    version="0.0.1",
+    version="0.1.0",
     license="MIT license",
-    description="Utility library for collection valid Python files recursively",
+    description="Utility library to collect files recursively",
     long_description="%s\n%s"
     % (
         re.compile("^.. start-badges.*^.. end-badges", re.M | re.S).sub(
