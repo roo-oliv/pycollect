@@ -35,9 +35,9 @@ Overview
     :alt: PyPI Package latest release
     :target: https://pypi.org/project/pycollect
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/allrod5/pycollect/0.1.0.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/allrod5/pycollect/0.1.1.svg
     :alt: Commits since latest release
-    :target: https://github.com/allrod5/pycollect/compare/0.1.0...master
+    :target: https://github.com/allrod5/pycollect/compare/0.1.1...master
 
 .. |wheel| image:: https://img.shields.io/pypi/wheel/pycollect.svg
     :alt: PyPI Wheel
