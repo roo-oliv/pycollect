@@ -6,8 +6,34 @@ from typing import Iterable, Optional, Set
 
 class PythonFileCollector:
     """
-    PythonFileCollector class provides general configurations
-    and utility methods for collecting Python files
+    PythonFileCollector provides method "collect" to collect files
+    while applying exclusion patterns to files and directories.
+
+    Exclusion patterns are in respect to file and directory names only, NOT taking
+    into account the absolute nor the relative file or directory path.
+
+    When not using regex patterns, a single wildcard, "*", can be used anywhere in
+    a pattern to filter names "starting with" and/or "ending with". Also, a single
+    exclamation mark, "!", can be used at the beginning of the pattern to negate it.
+    These only applies when :param use_regex_patterns: is False.
+
+    Notice that using regex patterns may be slower.
+
+    :param use_regex_patterns:
+        (default: False) flag to indicate whether or not to use regex to match
+        patterns. When this flag it set to False the PythonFileCollector._WILDCARD
+        (default: "*") character is interpreted as wildcard and patterns starting
+        with the PythonFileCollector._NEGATION (default: "!") character are negated.
+    :param additional_file_exclusion_patterns:
+        (default: None) additional patterns to filter out of collection files. In
+        addition to the PythonFileCollector._DEFAULT_FILE_EXCLUSION_PATTERNS or
+        PythonFileCollector._DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS any file that
+        matches these patterns will be excluded from collection.
+    :param additional_dir_exclusion_patterns:
+        (default: None) additional patterns to filter out of collection directories.
+        In addition to the PythonFileCollector._DEFAULT_DIR_EXCLUSION_PATTERNS or
+        PythonFileCollector._DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS any directory that
+        matches these patterns will be excluded from collection.
     """
 
     _WILDCARD = "*"
@@ -58,34 +84,6 @@ class PythonFileCollector:
         additional_file_exclusion_patterns: Iterable[str] = None,
         additional_dir_exclusion_patterns: Iterable[str] = None,
     ):
-        """
-        PythonFileCollector provides method "collect" to collect files
-        while applying exclusion patterns to files and directories based exclusively on
-        their names and NOT taking into account their absolute nor relative paths.
-
-        When not using regex pattern a single wildcard, "*", can be used anywhere in
-        a pattern to filter names "starting with" and/or "ending with". Also, a single
-        exclamation mark, "!", can be used at the beginning of the pattern to negate it.
-        These only applies when :param use_regex_patterns: is False.
-
-        Notice that using regex patterns may be slower.
-
-        :param use_regex_patterns:
-            (default: False) flag to indicate whether or not to use regex to match
-            patterns. When this flag it set to False the PythonFileCollector._WILDCARD
-            (default: "*") character is interpreted as wildcard and patterns starting
-            with the PythonFileCollector._NEGATION (default: "!") character are negated.
-        :param additional_file_exclusion_patterns:
-            (default: None) additional patterns to filter out of collection files. In
-            addition to the PythonFileCollector._DEFAULT_FILE_EXCLUSION_PATTERNS or
-            PythonFileCollector._DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS any file that
-            matches these patterns will be excluded from collection.
-        :param additional_dir_exclusion_patterns:
-            (default: None) additional patterns to filter out of collection directories.
-            In addition to the PythonFileCollector._DEFAULT_DIR_EXCLUSION_PATTERNS or
-            PythonFileCollector._DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS any directory that
-            matches these patterns will be excluded from collection.
-        """
         self.enable_regex_patterns = use_regex_patterns
         if self.enable_regex_patterns:
             self.file_exclusion_patterns = (
@@ -116,6 +114,22 @@ class PythonFileCollector:
         recursion_limit: Optional[int] = None,
         follow_symlinks: bool = True,
     ) -> Set[os.DirEntry]:
+        """
+        Method to perform Python files collection in the specified search path,
+        respecting exclusion patterns set to the class object.
+
+        :param search_path:
+            (default: uses the caller's path) absolute or relative path from which to
+            search for when collecting Python files. This is expected to be a directory.
+        :param recursion_limit:
+            (default: None) directory recursion limit. The directory indicated by the
+            :param search_path: is considered level 0 of recursion.
+        :param follow_symlinks:
+            (default: True) boolean indicating whether or not to follow symbolic links
+            when collecting Python files.
+        :return:
+            A set of DirEntry instances referring to each collected file is returned.
+        """
         if search_path is None:
             search_path = self._get_caller_path()
 

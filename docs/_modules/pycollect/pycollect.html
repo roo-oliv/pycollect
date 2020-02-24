@@ -54,8 +54,34 @@
 
 <div class="viewcode-block" id="PythonFileCollector"><a class="viewcode-back" href="../../reference/pycollect.html#pycollect.PythonFileCollector">[docs]</a><span class="k">class</span> <span class="nc">PythonFileCollector</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    PythonFileCollector class provides general configurations</span>
-<span class="sd">    and utility methods for collecting Python files</span>
+<span class="sd">    PythonFileCollector provides method &quot;collect&quot; to collect files</span>
+<span class="sd">    while applying exclusion patterns to files and directories.</span>
+
+<span class="sd">    Exclusion patterns are in respect to file and directory names only, NOT taking</span>
+<span class="sd">    into account the absolute nor the relative file or directory path.</span>
+
+<span class="sd">    When not using regex patterns, a single wildcard, &quot;*&quot;, can be used anywhere in</span>
+<span class="sd">    a pattern to filter names &quot;starting with&quot; and/or &quot;ending with&quot;. Also, a single</span>
+<span class="sd">    exclamation mark, &quot;!&quot;, can be used at the beginning of the pattern to negate it.</span>
+<span class="sd">    These only applies when :param use_regex_patterns: is False.</span>
+
+<span class="sd">    Notice that using regex patterns may be slower.</span>
+
+<span class="sd">    :param use_regex_patterns:</span>
+<span class="sd">        (default: False) flag to indicate whether or not to use regex to match</span>
+<span class="sd">        patterns. When this flag it set to False the PythonFileCollector._WILDCARD</span>
+<span class="sd">        (default: &quot;*&quot;) character is interpreted as wildcard and patterns starting</span>
+<span class="sd">        with the PythonFileCollector._NEGATION (default: &quot;!&quot;) character are negated.</span>
+<span class="sd">    :param additional_file_exclusion_patterns:</span>
+<span class="sd">        (default: None) additional patterns to filter out of collection files. In</span>
+<span class="sd">        addition to the PythonFileCollector._DEFAULT_FILE_EXCLUSION_PATTERNS or</span>
+<span class="sd">        PythonFileCollector._DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS any file that</span>
+<span class="sd">        matches these patterns will be excluded from collection.</span>
+<span class="sd">    :param additional_dir_exclusion_patterns:</span>
+<span class="sd">        (default: None) additional patterns to filter out of collection directories.</span>
+<span class="sd">        In addition to the PythonFileCollector._DEFAULT_DIR_EXCLUSION_PATTERNS or</span>
+<span class="sd">        PythonFileCollector._DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS any directory that</span>
+<span class="sd">        matches these patterns will be excluded from collection.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_WILDCARD</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span>
@@ -106,34 +132,6 @@
         <span class="n">additional_file_exclusion_patterns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">additional_dir_exclusion_patterns</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        PythonFileCollector provides method &quot;collect&quot; to collect files</span>
-<span class="sd">        while applying exclusion patterns to files and directories based exclusively on</span>
-<span class="sd">        their names and NOT taking into account their absolute nor relative paths.</span>
-
-<span class="sd">        When not using regex pattern a single wildcard, &quot;*&quot;, can be used anywhere in</span>
-<span class="sd">        a pattern to filter names &quot;starting with&quot; and/or &quot;ending with&quot;. Also, a single</span>
-<span class="sd">        exclamation mark, &quot;!&quot;, can be used at the beginning of the pattern to negate it.</span>
-<span class="sd">        These only applies when :param use_regex_patterns: is False.</span>
-
-<span class="sd">        Notice that using regex patterns may be slower.</span>
-
-<span class="sd">        :param use_regex_patterns:</span>
-<span class="sd">            (default: False) flag to indicate whether or not to use regex to match</span>
-<span class="sd">            patterns. When this flag it set to False the PythonFileCollector._WILDCARD</span>
-<span class="sd">            (default: &quot;*&quot;) character is interpreted as wildcard and patterns starting</span>
-<span class="sd">            with the PythonFileCollector._NEGATION (default: &quot;!&quot;) character are negated.</span>
-<span class="sd">        :param additional_file_exclusion_patterns:</span>
-<span class="sd">            (default: None) additional patterns to filter out of collection files. In</span>
-<span class="sd">            addition to the PythonFileCollector._DEFAULT_FILE_EXCLUSION_PATTERNS or</span>
-<span class="sd">            PythonFileCollector._DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS any file that</span>
-<span class="sd">            matches these patterns will be excluded from collection.</span>
-<span class="sd">        :param additional_dir_exclusion_patterns:</span>
-<span class="sd">            (default: None) additional patterns to filter out of collection directories.</span>
-<span class="sd">            In addition to the PythonFileCollector._DEFAULT_DIR_EXCLUSION_PATTERNS or</span>
-<span class="sd">            PythonFileCollector._DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS any directory that</span>
-<span class="sd">            matches these patterns will be excluded from collection.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">enable_regex_patterns</span> <span class="o">=</span> <span class="n">use_regex_patterns</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_regex_patterns</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">file_exclusion_patterns</span> <span class="o">=</span> <span class="p">(</span>
@@ -158,12 +156,28 @@
         <span class="n">caller_abs_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">caller_filename</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">caller_abs_path</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">collect</span><span class="p">(</span>
+<div class="viewcode-block" id="PythonFileCollector.collect"><a class="viewcode-back" href="../../reference/pycollect.html#pycollect.PythonFileCollector.collect">[docs]</a>    <span class="k">def</span> <span class="nf">collect</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">search_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">recursion_limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">follow_symlinks</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">DirEntry</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to perform Python files collection in the specified search path,</span>
+<span class="sd">        respecting exclusion patterns set to the class object.</span>
+
+<span class="sd">        :param search_path:</span>
+<span class="sd">            (default: uses the caller&#39;s path) absolute or relative path from which to</span>
+<span class="sd">            search for when collecting Python files. This is expected to be a directory.</span>
+<span class="sd">        :param recursion_limit:</span>
+<span class="sd">            (default: None) directory recursion limit. The directory indicated by the</span>
+<span class="sd">            :param search_path: is considered level 0 of recursion.</span>
+<span class="sd">        :param follow_symlinks:</span>
+<span class="sd">            (default: True) boolean indicating whether or not to follow symbolic links</span>
+<span class="sd">            when collecting Python files.</span>
+<span class="sd">        :return:</span>
+<span class="sd">            A set of DirEntry instances referring to each collected file is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">search_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">search_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_caller_path</span><span class="p">()</span>
 
@@ -204,7 +218,7 @@
                     <span class="p">)</span>
                 <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">collected_files</span>
+        <span class="k">return</span> <span class="n">collected_files</span></div>
 
     <span class="k">def</span> <span class="nf">_should_exclude_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">DirEntry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span>  <span class="c1"># type: str</span>
@@ -278,7 +292,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Rodrigo Martins de Oliveira.
-      Last updated on Dec 22, 2019.
+      Last updated on Feb 24, 2020.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>

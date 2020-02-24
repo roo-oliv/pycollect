@@ -61,9 +61,7 @@ setup(
         "Changelog": "https://allrod5.github.io/pycollect/en/latest/changelog.html",
         "Issue Tracker": "https://github.com/allrod5/pycollect/issues",
     },
-    keywords=[
-        # eg: 'keyword1', 'keyword2', 'keyword3',
-    ],
+    keywords=["file", "py", "traversal", "directory"],
     python_requires=">=3.5",
     install_requires=[
         # eg: 'aspectlib==1.1.1', 'six>=1.7',

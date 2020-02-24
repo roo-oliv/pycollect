@@ -2,9 +2,9 @@
 Usage
 =====
 
-To use pycollect in a project::
+Basic pycollect usage is straight forward::
 
     from pycollect import PythonFileCollector
 
-    file_collector = PythonFileCollector()
-    files = file_collector.collect()
+    collector = PythonFileCollector()
+    files = collector.collect()

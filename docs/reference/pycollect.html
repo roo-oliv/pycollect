@@ -52,8 +52,55 @@
 <span class="target" id="module-pycollect"></span><dl class="class">
 <dt id="pycollect.PythonFileCollector">
 <em class="property">class </em><code class="sig-prename descclassname">pycollect.</code><code class="sig-name descname">PythonFileCollector</code><span class="sig-paren">(</span><em class="sig-param">use_regex_patterns: bool = False</em>, <em class="sig-param">additional_file_exclusion_patterns: Iterable[str] = None</em>, <em class="sig-param">additional_dir_exclusion_patterns: Iterable[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycollect/pycollect.html#PythonFileCollector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycollect.PythonFileCollector" title="Permalink to this definition">¶</a></dt>
-<dd><p>PythonFileCollector class provides general configurations
-and utility methods for collecting Python files</p>
+<dd><p>PythonFileCollector provides method “collect” to collect files
+while applying exclusion patterns to files and directories.</p>
+<p>Exclusion patterns are in respect to file and directory names only, NOT taking
+into account the absolute nor the relative file or directory path.</p>
+<p>When not using regex patterns, a single wildcard, “*”, can be used anywhere in
+a pattern to filter names “starting with” and/or “ending with”. Also, a single
+exclamation mark, “!”, can be used at the beginning of the pattern to negate it.
+These only applies when :param use_regex_patterns: is False.</p>
+<p>Notice that using regex patterns may be slower.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>use_regex_patterns</strong> – (default: False) flag to indicate whether or not to use regex to match
+patterns. When this flag it set to False the PythonFileCollector._WILDCARD
+(default: “*”) character is interpreted as wildcard and patterns starting
+with the PythonFileCollector._NEGATION (default: “!”) character are negated.</p></li>
+<li><p><strong>additional_file_exclusion_patterns</strong> – (default: None) additional patterns to filter out of collection files. In
+addition to the PythonFileCollector._DEFAULT_FILE_EXCLUSION_PATTERNS or
+PythonFileCollector._DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS any file that
+matches these patterns will be excluded from collection.</p></li>
+<li><p><strong>additional_dir_exclusion_patterns</strong> – (default: None) additional patterns to filter out of collection directories.
+In addition to the PythonFileCollector._DEFAULT_DIR_EXCLUSION_PATTERNS or
+PythonFileCollector._DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS any directory that
+matches these patterns will be excluded from collection.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pycollect.PythonFileCollector.collect">
+<code class="sig-name descname">collect</code><span class="sig-paren">(</span><em class="sig-param">search_path: Optional[str] = None</em>, <em class="sig-param">recursion_limit: Optional[int] = None</em>, <em class="sig-param">follow_symlinks: bool = True</em><span class="sig-paren">)</span> &#x2192; Set[posix.DirEntry]<a class="reference internal" href="../_modules/pycollect/pycollect.html#PythonFileCollector.collect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycollect.PythonFileCollector.collect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to perform Python files collection in the specified search path,
+respecting exclusion patterns set to the class object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>search_path</strong> – (default: uses the caller’s path) absolute or relative path from which to
+search for when collecting Python files. This is expected to be a directory.</p></li>
+<li><p><strong>recursion_limit</strong> – (default: None) directory recursion limit. The directory indicated by the
+:param search_path: is considered level 0 of recursion.</p></li>
+<li><p><strong>follow_symlinks</strong> – (default: True) boolean indicating whether or not to follow symbolic links
+when collecting Python files.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A set of DirEntry instances referring to each collected file is returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -121,7 +168,7 @@ and utility methods for collecting Python files</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Rodrigo Martins de Oliveira.
-      Last updated on Dec 22, 2019.
+      Last updated on Feb 24, 2020.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>

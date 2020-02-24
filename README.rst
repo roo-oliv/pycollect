@@ -19,7 +19,7 @@ Overview
     :target: https://allrod5.github.io/pycollect/
     :alt: Documentation Status
 
-.. |build| image:: [![Build Status](https://github.com/allrod5/pycollect/workflows/build/badge.svg)]
+.. |build| image:: https://github.com/allrod5/pycollect/workflows/build/badge.svg
     :alt: Build Status
     :target: https://github.com/allrod5/pycollect/actions
 
@@ -54,7 +54,7 @@ Overview
 
 .. end-badges
 
-Utility library for collection valid Python files recursively
+Utility library for collecting valid Python files recursively.
 
 * Free software: MIT license
 
@@ -65,16 +65,24 @@ Installation
 
     pip install pycollect
 
+
+Basic Usage
+===========
+
+::
+
+    collector = PythonFileCollector()
+    python_files = collector.collect()
+
 Documentation
 =============
 
+Complete docs: https://allrod5.github.io/pycollect/
 
-https://allrod5.github.io/pycollect/
 
+See also
+--------
 
-Development
-===========
-
-To run the all tests run::
-
-    make tests
+* :ref:`contributing`
+* :ref:`changelog`
+* :ref:`authors`
