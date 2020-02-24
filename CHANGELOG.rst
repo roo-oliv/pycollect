@@ -1,5 +1,3 @@
-.. _changelog:
-
 Changelog
 =========
 
@@ -17,3 +15,8 @@ Changelog
 ------------------
 
 * First beta release
+
+0.1.1 (2020-02-24)
+------------------
+
+* Update docs

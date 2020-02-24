@@ -46,7 +46,7 @@ checks: black-check flake-check  ## perform code standards and style checks
 
 .PHONY: package
 package:
-	pyton setup.py sdist
+	python setup.py sdist
 
 .PHONY: github-pages
 github-pages:

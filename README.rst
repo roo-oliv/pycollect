@@ -83,6 +83,6 @@ Complete docs: https://allrod5.github.io/pycollect/
 See also
 --------
 
-* :ref:`contributing`
-* :ref:`changelog`
-* :ref:`authors`
+* `CONTRIBUTING <https://allrod5.github.io/pycollect/contributing.html>`_
+* `CHANGELOG <https://allrod5.github.io/pycollect/changelog.html>`_
+* `AUTHORS <https://allrod5.github.io/pycollect/authors.html>`_
