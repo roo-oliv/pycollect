@@ -1,5 +1,6 @@
-from pycollect.pycollect import PythonFileCollector
+from pycollect.python_file_collector import PythonFileCollector
+from pycollect.module_finder import find_module_name
 
-__version__ = "0.0.0"
+__version__ = "0.2.0"
 
-__all__ = ["PythonFileCollector"]
+__all__ = ["PythonFileCollector", "find_module_name"]

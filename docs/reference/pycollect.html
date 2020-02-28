@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>pycollect &#8212; pycollect 0.1.0 documentation</title>
+    <title>pycollect &#8212; pycollect 0.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -30,7 +30,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../index.html">pycollect-0.1.0</a> &#187;</li>
+        <li><a href="../index.html">pycollect-0.2.0</a> &#187;</li>
           <li><a href="index.html" accesskey="U">Reference</a> &#187;</li> 
       </ul>
     </div>
@@ -51,7 +51,7 @@
 <h1>pycollect<a class="headerlink" href="#pycollect" title="Permalink to this headline">¶</a></h1>
 <span class="target" id="module-pycollect"></span><dl class="class">
 <dt id="pycollect.PythonFileCollector">
-<em class="property">class </em><code class="sig-prename descclassname">pycollect.</code><code class="sig-name descname">PythonFileCollector</code><span class="sig-paren">(</span><em class="sig-param">use_regex_patterns: bool = False</em>, <em class="sig-param">additional_file_exclusion_patterns: Iterable[str] = None</em>, <em class="sig-param">additional_dir_exclusion_patterns: Iterable[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycollect/pycollect.html#PythonFileCollector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycollect.PythonFileCollector" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pycollect.</code><code class="sig-name descname">PythonFileCollector</code><span class="sig-paren">(</span><em class="sig-param">use_regex_patterns: bool = False</em>, <em class="sig-param">additional_file_exclusion_patterns: Iterable[str] = None</em>, <em class="sig-param">additional_dir_exclusion_patterns: Iterable[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycollect/python_file_collector.html#PythonFileCollector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycollect.PythonFileCollector" title="Permalink to this definition">¶</a></dt>
 <dd><p>PythonFileCollector provides method “collect” to collect files
 while applying exclusion patterns to files and directories.</p>
 <p>Exclusion patterns are in respect to file and directory names only, NOT taking
@@ -81,7 +81,7 @@ matches these patterns will be excluded from collection.</p></li>
 </dl>
 <dl class="method">
 <dt id="pycollect.PythonFileCollector.collect">
-<code class="sig-name descname">collect</code><span class="sig-paren">(</span><em class="sig-param">search_path: Optional[str] = None</em>, <em class="sig-param">recursion_limit: Optional[int] = None</em>, <em class="sig-param">follow_symlinks: bool = True</em><span class="sig-paren">)</span> &#x2192; Set[posix.DirEntry]<a class="reference internal" href="../_modules/pycollect/pycollect.html#PythonFileCollector.collect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycollect.PythonFileCollector.collect" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">collect</code><span class="sig-paren">(</span><em class="sig-param">search_path: Optional[str] = None</em>, <em class="sig-param">recursion_limit: Optional[int] = None</em>, <em class="sig-param">follow_symlinks: bool = True</em><span class="sig-paren">)</span> &#x2192; Set[posix.DirEntry]<a class="reference internal" href="../_modules/pycollect/python_file_collector.html#PythonFileCollector.collect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycollect.PythonFileCollector.collect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method to perform Python files collection in the specified search path,
 respecting exclusion patterns set to the class object.</p>
 <dl class="field-list simple">
@@ -101,6 +101,26 @@ when collecting Python files.</p></li>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="pycollect.find_module_name">
+<code class="sig-prename descclassname">pycollect.</code><code class="sig-name descname">find_module_name</code><span class="sig-paren">(</span><em class="sig-param">filepath: Union[posix.DirEntry, str], innermost: bool = False</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="reference internal" href="../_modules/pycollect/module_finder.html#find_module_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycollect.find_module_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility function to find the Python module name of a python file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> – The absolute filepath as a DirEntry object or path string.</p></li>
+<li><p><strong>innermost</strong> – (default: False) By default the outermost possible module name is returned.
+When this flag is set to True, the first found, innermost possible module name
+is then returned without further looking.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The module name string or None if no module was found for the specified
+filepath.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -168,7 +188,7 @@ when collecting Python files.</p></li>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Rodrigo Martins de Oliveira.
-      Last updated on Feb 24, 2020.
+      Last updated on Feb 28, 2020.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.3.
     </div>
   </body>
