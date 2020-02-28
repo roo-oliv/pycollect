@@ -4,7 +4,7 @@ from typing import List
 
 import pytest
 
-from pycollect.pycollect import PythonFileCollector
+from pycollect.python_file_collector import PythonFileCollector
 
 
 @pytest.fixture

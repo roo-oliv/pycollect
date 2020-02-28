@@ -1,22 +1,27 @@
 Changelog
 =========
 
-0.0.0 (2019-08-31)
+0.2.0 (2020-02-28)
 ------------------
 
-* First release on PyPI.
+* Added utility function to find a file's module name
 
-0.0.1 (2019-09-01)
+0.1.1 (2020-02-24)
 ------------------
 
-* Fix GitHub release workflow.
+* Update docs
 
 0.1.0 (2019-12-22)
 ------------------
 
 * First beta release
 
-0.1.1 (2020-02-24)
+0.0.1 (2019-09-01)
 ------------------
 
-* Update docs
+* Fix GitHub release workflow.
+
+0.0.0 (2019-08-31)
+------------------
+
+* First release on PyPI.
