@@ -23,15 +23,18 @@ def find_module_name(
     """
     if isinstance(filepath, DirEntry):
         filepath = filepath.path
+
     valid_module_name = None
     module_name = splitext(basename(filepath))[0]
     full_path = Path(dirname(filepath))
-    while full_path.root != full_path.as_posix():
-        if full_path.as_posix() in sys.path:
+    at_root = False
+    while not at_root:
+        if str(full_path) in sys.path:
             if innermost:
                 return module_name
             else:
                 valid_module_name = module_name
         module_name = f"{basename(full_path)}.{module_name}"
+        at_root = full_path.parent == full_path.parent.parent
         full_path = Path(full_path.parent)
     return valid_module_name

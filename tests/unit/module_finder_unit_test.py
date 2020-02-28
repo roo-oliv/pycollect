@@ -1,6 +1,21 @@
+import os
 import sys
+from pathlib import Path
 
 from pycollect import find_module_name
+
+
+def build_path(*paths: str) -> str:
+    root_dir = "usr" if os.name != "nt" else "C:"
+    return os.path.join(os.sep, root_dir + os.sep, *paths)
+
+
+def join_paths(*paths: str) -> str:
+    return os.path.join(*paths)
+
+
+def parent_path(path: str) -> str:
+    return str(Path(path).parent)
 
 
 def test_find_outermost_module_name():
@@ -9,11 +24,11 @@ def test_find_outermost_module_name():
     find the correct outermost module name for a given filepath by default
     """
     # given
-    package_path = "/system_path/some_package"
-    inner_module_path = package_path + "/inner_module"
-    filepath = inner_module_path + "/foo/bar.py"
-    sys.path.append(package_path.rsplit("/", maxsplit=1)[0])
-    sys.path.append(inner_module_path.rsplit("/", maxsplit=1)[0])
+    package_path = build_path("test_find_outermost_module_name", "some_package")
+    inner_module_path = join_paths(package_path, "inner_module")
+    filepath = join_paths(inner_module_path, "foo", "bar.py")
+    sys.path.append(parent_path(package_path))
+    sys.path.append(parent_path(inner_module_path))
     expected_module_name = "some_package.inner_module.foo.bar"
 
     # when
@@ -30,11 +45,11 @@ def test_find_innermost_module_name():
     `innermost=True`
     """
     # given
-    package_path = "/system_path/some_package"
-    inner_module_path = package_path + "/inner_module"
-    filepath = inner_module_path + "/foo/bar.py"
-    sys.path.append(package_path.rsplit("/", maxsplit=1)[0])
-    sys.path.append(inner_module_path.rsplit("/", maxsplit=1)[0])
+    package_path = build_path("test_find_outermost_module_name", "some_package")
+    inner_module_path = join_paths(package_path, "inner_module")
+    filepath = join_paths(inner_module_path, "foo", "bar.py")
+    sys.path.append(parent_path(package_path))
+    sys.path.append(parent_path(inner_module_path))
     expected_module_name = "inner_module.foo.bar"
 
     # when
@@ -50,9 +65,7 @@ def test_find_nonexistent_module_name():
     return None for files it can not attribute a module name
     """
     # given
-    filepath = "/not_in_python_path_module/bar.py"
-    if filepath.rsplit("/", maxsplit=1)[0] in sys.path:
-        sys.path.remove(filepath.rsplit("/", maxsplit=1)[0])
+    filepath = build_path("test_find_nonexistent_module_name", "bar.py")
 
     # when
     module_name = find_module_name(filepath)
