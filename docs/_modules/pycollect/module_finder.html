@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>pycollect.module_finder &#8212; pycollect 0.2.0 documentation</title>
+    <title>pycollect.module_finder &#8212; pycollect 0.2.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
@@ -28,7 +28,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../index.html">pycollect-0.2.0</a> &#187;</li>
+        <li><a href="../../index.html">pycollect-0.2.1</a> &#187;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -71,16 +71,19 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">DirEntry</span><span class="p">):</span>
         <span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span><span class="o">.</span><span class="n">path</span>
+
     <span class="n">valid_module_name</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">module_name</span> <span class="o">=</span> <span class="n">splitext</span><span class="p">(</span><span class="n">basename</span><span class="p">(</span><span class="n">filepath</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">full_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
-    <span class="k">while</span> <span class="n">full_path</span><span class="o">.</span><span class="n">root</span> <span class="o">!=</span> <span class="n">full_path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">full_path</span><span class="o">.</span><span class="n">as_posix</span><span class="p">()</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">at_root</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">at_root</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">innermost</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">module_name</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">valid_module_name</span> <span class="o">=</span> <span class="n">module_name</span>
         <span class="n">module_name</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;{basename(full_path)}.</span><span class="si">{module_name}</span><span class="s2">&quot;</span>
+        <span class="n">at_root</span> <span class="o">=</span> <span class="n">full_path</span><span class="o">.</span><span class="n">parent</span> <span class="o">==</span> <span class="n">full_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
         <span class="n">full_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">full_path</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">valid_module_name</span></div>
 </pre></div>
