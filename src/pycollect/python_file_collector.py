@@ -38,7 +38,6 @@ class PythonFileCollector:
 
     _WILDCARD = "*"
     _NEGATION = "!"
-    _INIT_FILE = "__init__.py"
     _DEFAULT_FILE_EXCLUSION_PATTERNS = {"!*.py", ".*", "~*"}
     _DEFAULT_DIR_EXCLUSION_PATTERNS = {
         "__pycache__",
@@ -156,12 +155,6 @@ class PythonFileCollector:
             if recursion_limit is not None:
                 recursion_limit -= 1
             for subdir in collected_dirs:
-                if not any(
-                    entry.is_file(follow_symlinks=follow_symlinks)
-                    and self._INIT_FILE == entry.name
-                    for entry in os.scandir(subdir.path)
-                ):
-                    continue
                 collected_files.update(
                     self.collect(
                         search_path=subdir.path,

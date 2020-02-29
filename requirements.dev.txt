@@ -7,3 +7,4 @@ pytest-cov~=2.8.1
 sphinx~=2.4.3
 sphinx_py3doc_enhanced_theme~=2.4.0
 coveralls~=1.11.1
+bumpversion~=0.5.3

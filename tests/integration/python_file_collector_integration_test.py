@@ -30,6 +30,8 @@ def search_path() -> str:
             ["foo", "__init__.py"],
             ["foo", "foo.py"],
             ["bar", "__init__.py"],
+            ["bar", "misc", "pkg", "pkg.py"],
+            ["qux", "qux.py"],
         ]
     ],
 )
@@ -64,6 +66,8 @@ def test_example_module_with_default_configurations(
                 ["bar.py"],
                 ["foo", "__init__.py"],
                 ["bar", "__init__.py"],
+                ["bar", "misc", "pkg", "pkg.py"],
+                ["qux", "qux.py"],
             ],
         ),
         (
@@ -74,6 +78,8 @@ def test_example_module_with_default_configurations(
                 ["bar.py"],
                 ["foo", "__init__.py"],
                 ["bar", "__init__.py"],
+                ["bar", "misc", "pkg", "pkg.py"],
+                ["qux", "qux.py"],
             ],
         ),
         (False, ["!f*.py"], [["fun.py"], ["foo.py"], ["foo", "foo.py"]]),

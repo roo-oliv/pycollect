@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2.2 (2020-02-29)
+------------------
+
+* Lift __init__.py requirement for considering a path as importable
+
 0.2.1 (2020-02-29)
 ------------------
 

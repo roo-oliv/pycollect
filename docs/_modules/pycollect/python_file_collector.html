@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>pycollect.python_file_collector &#8212; pycollect 0.2.1 documentation</title>
+    <title>pycollect.python_file_collector &#8212; pycollect 0.2.2 documentation</title>
     <link rel="stylesheet" href="../../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
@@ -28,7 +28,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../index.html">pycollect-0.2.1</a> &#187;</li>
+        <li><a href="../../index.html">pycollect-0.2.2</a> &#187;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -86,7 +86,6 @@
 
     <span class="n">_WILDCARD</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span>
     <span class="n">_NEGATION</span> <span class="o">=</span> <span class="s2">&quot;!&quot;</span>
-    <span class="n">_INIT_FILE</span> <span class="o">=</span> <span class="s2">&quot;__init__.py&quot;</span>
     <span class="n">_DEFAULT_FILE_EXCLUSION_PATTERNS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;!*.py&quot;</span><span class="p">,</span> <span class="s2">&quot;.*&quot;</span><span class="p">,</span> <span class="s2">&quot;~*&quot;</span><span class="p">}</span>
     <span class="n">_DEFAULT_DIR_EXCLUSION_PATTERNS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;__pycache__&quot;</span><span class="p">,</span>
@@ -204,12 +203,6 @@
             <span class="k">if</span> <span class="n">recursion_limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">recursion_limit</span> <span class="o">-=</span> <span class="mi">1</span>
             <span class="k">for</span> <span class="n">subdir</span> <span class="ow">in</span> <span class="n">collected_dirs</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span>
-                    <span class="n">entry</span><span class="o">.</span><span class="n">is_file</span><span class="p">(</span><span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">)</span>
-                    <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_INIT_FILE</span> <span class="o">==</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span>
-                    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">scandir</span><span class="p">(</span><span class="n">subdir</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
-                <span class="p">):</span>
-                    <span class="k">continue</span>
                 <span class="n">collected_files</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">collect</span><span class="p">(</span>
                         <span class="n">search_path</span><span class="o">=</span><span class="n">subdir</span><span class="o">.</span><span class="n">path</span><span class="p">,</span>

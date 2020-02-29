@@ -53,6 +53,20 @@ github-pages:
 	make html
 	cp -a build/html/. docs
 
+CURRENT_VERSION = 0.2.2
+
+.PHONY: bump-patch-version
+bump-patch-version:
+	bumpversion --allow-dirty --current-version $(CURRENT_VERSION) patch
+
+.PHONY: bump-minor-version
+bump-minor-version:
+	bumpversion --allow-dirty --current-version $(CURRENT_VERSION) minor
+
+.PHONY: bump-major-version
+bump-major-version:
+	bumpversion --allow-dirty --current-version $(CURRENT_VERSION) major
+
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SOURCEDIR     = docs
