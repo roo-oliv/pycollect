@@ -6,31 +6,31 @@ from typing import Iterable, Optional, Set
 
 class PythonFileCollector:
     """
-    PythonFileCollector provides method "collect" to collect files
+    PythonFileCollector provides method :meth:`collect` to collect files
     while applying exclusion patterns to files and directories.
 
     Exclusion patterns are in respect to file and directory names only, NOT taking
     into account the absolute nor the relative file or directory path.
 
-    When not using regex patterns, a single wildcard, "*", can be used anywhere in
+    When not using regex patterns, a single wildcard, ``*``, can be used anywhere in
     a pattern to filter names "starting with" and/or "ending with". Also, a single
-    exclamation mark, "!", can be used at the beginning of the pattern to negate it.
-    These only applies when :param use_regex_patterns: is False.
+    exclamation mark, ``!``, can be used at the beginning of the pattern to negate it.
+    These only applies when the parameter ``use_regex_patterns`` is ``False``.
 
-    Notice that using regex patterns may be slower.
+    .. note::
+        Using regex patterns may be slower as it consumes more CPU.
 
     :param use_regex_patterns:
-        (default: False) flag to indicate whether or not to use regex to match
-        patterns. When this flag it set to False the PythonFileCollector._WILDCARD
-        (default: "*") character is interpreted as wildcard and patterns starting
-        with the PythonFileCollector._NEGATION (default: "!") character are negated.
+        (default: ``False``) flag to indicate whether or not to use regex to match
+        patterns. When this flag it set to ``False`` the ``*`` character is interpreted
+        as wildcard and patterns starting with the ``!`` character are negated.
     :param additional_file_exclusion_patterns:
-        (default: None) additional patterns to filter out of collection files. In
+        (default: ``None``) additional patterns to filter out of collection files. In
         addition to the PythonFileCollector._DEFAULT_FILE_EXCLUSION_PATTERNS or
         PythonFileCollector._DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS any file that
         matches these patterns will be excluded from collection.
     :param additional_dir_exclusion_patterns:
-        (default: None) additional patterns to filter out of collection directories.
+        (default: ``None``) additional patterns to filter out of collection directories.
         In addition to the PythonFileCollector._DEFAULT_DIR_EXCLUSION_PATTERNS or
         PythonFileCollector._DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS any directory that
         matches these patterns will be excluded from collection.
@@ -38,8 +38,23 @@ class PythonFileCollector:
 
     _WILDCARD = "*"
     _NEGATION = "!"
-    _DEFAULT_FILE_EXCLUSION_PATTERNS = {"!*.py", ".*", "~*"}
-    _DEFAULT_DIR_EXCLUSION_PATTERNS = {
+    #: The default set of file exclusion patterns.
+    #:
+    #: Are excluded by default:
+    #:
+    #: 1. Files without the ``.py`` extension;
+    #: 2. Files starting with a dot (``.``); and
+    #: 3. Files starting with a tilde (``~``).
+    DEFAULT_FILE_EXCLUSION_PATTERNS = {"!*.py", ".*", "~*"}
+    #: The default set of directory exclusion patterns.
+    #:
+    #: Are excluded by default:
+    #:
+    #: 1. Directories starting with a dot (``.``);
+    #: 2. Directories ending with a tilde (``~``).
+    #: 3. Directories with common names indicating auto-generated content, binaries,
+    #:    cache and temporary content (e.g., ``__pycache__``, ``tmp``, ``dist``)
+    DEFAULT_DIR_EXCLUSION_PATTERNS = {
         "__pycache__",
         "tmp",
         "build",
@@ -92,8 +107,8 @@ class PythonFileCollector:
                 self._DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS.copy()
             )
         else:
-            self.file_exclusion_patterns = self._DEFAULT_FILE_EXCLUSION_PATTERNS.copy()
-            self.dir_exclusion_patterns = self._DEFAULT_DIR_EXCLUSION_PATTERNS.copy()
+            self.file_exclusion_patterns = self.DEFAULT_FILE_EXCLUSION_PATTERNS.copy()
+            self.dir_exclusion_patterns = self.DEFAULT_DIR_EXCLUSION_PATTERNS.copy()
 
         if additional_file_exclusion_patterns:
             self.file_exclusion_patterns.update(additional_file_exclusion_patterns)

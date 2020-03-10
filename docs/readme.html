@@ -54,51 +54,66 @@
 <col style="width: 50%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><th class="stub"><p>docs</p></th>
+<tr class="row-odd"><th class="stub"><p>license</p></th>
+<td><p><a class="reference external" href="https://github.com/allrod5/pycollect/blob/master/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/allrod5/pycollect" /></a></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p>docs</p></th>
 <td><p><a class="reference external" href="https://allrod5.github.io/pycollect/"><img alt="Documentation Status" src="https://img.shields.io/badge/docs-GitHub%20Pages-black" /></a></p></td>
 </tr>
-<tr class="row-even"><th class="stub"><p>tests</p></th>
-<td><div class="line-block">
-<div class="line"><a class="reference external" href="https://github.com/allrod5/pycollect/actions"><img alt="Build Status" src="https://github.com/allrod5/pycollect/workflows/build/badge.svg" /></a> <a class="reference external" href="https://requires.io/github/allrod5/pycollect/requirements/?branch=master"><img alt="Requirements Status" src="https://requires.io/github/allrod5/pycollect/requirements.svg?branch=master" /></a></div>
-<div class="line"><a class="reference external" href="https://coveralls.io/r/allrod5/pycollect"><img alt="Coverage Status" src="https://coveralls.io/repos/allrod5/pycollect/badge.svg?branch=master&amp;service=github" /></a></div>
-</div>
-</td>
+<tr class="row-odd"><th class="stub"><p>tests</p></th>
+<td><p><a class="reference external" href="https://github.com/allrod5/pycollect/actions"><img alt="Build Status" src="https://github.com/allrod5/pycollect/workflows/build/badge.svg" /></a> <a class="reference external" href="https://requires.io/github/allrod5/pycollect/requirements/?branch=master"><img alt="Requirements Status" src="https://requires.io/github/allrod5/pycollect/requirements.svg?branch=master" /></a> <a class="reference external" href="https://coveralls.io/r/allrod5/pycollect"><img alt="Coverage Status" src="https://coveralls.io/repos/allrod5/pycollect/badge.svg?branch=master&amp;service=github" /></a></p></td>
 </tr>
-<tr class="row-odd"><th class="stub"><p>package</p></th>
-<td><div class="line-block">
-<div class="line"><a class="reference external" href="https://pypi.org/project/pycollect"><img alt="PyPI Package latest release" src="https://img.shields.io/pypi/v/pycollect.svg" /></a> <a class="reference external" href="https://pypi.org/project/pycollect"><img alt="PyPI Wheel" src="https://img.shields.io/pypi/wheel/pycollect.svg" /></a> <a class="reference external" href="https://pypi.org/project/pycollect"><img alt="Supported versions" src="https://img.shields.io/pypi/pyversions/pycollect.svg" /></a> <a class="reference external" href="https://pypi.org/project/pycollect"><img alt="Supported implementations" src="https://img.shields.io/pypi/implementation/pycollect.svg" /></a></div>
-<div class="line"><a class="reference external" href="https://github.com/allrod5/pycollect/compare/0.2.2...master"><img alt="Commits since latest release" src="https://img.shields.io/github/commits-since/allrod5/pycollect/0.2.2.svg" /></a></div>
-</div>
-</td>
+<tr class="row-even"><th class="stub"><p>package</p></th>
+<td><p><a class="reference external" href="https://pypi.org/project/pycollect"><img alt="PyPI Package latest release" src="https://img.shields.io/pypi/v/pycollect.svg" /></a> <a class="reference external" href="https://pypi.org/project/pycollect"><img alt="PyPI Wheel" src="https://img.shields.io/pypi/wheel/pycollect.svg" /></a> <a class="reference external" href="https://pypi.org/project/pycollect"><img alt="Supported versions" src="https://img.shields.io/pypi/pyversions/pycollect.svg" /></a> <a class="reference external" href="https://pypi.org/project/pycollect"><img alt="Supported implementations" src="https://img.shields.io/pypi/implementation/pycollect.svg" /></a> <a class="reference external" href="https://github.com/allrod5/pycollect/blob/master/.github/workflows/build.yml#L11"><img alt="Supported Platforms" src="https://img.shields.io/badge/platforms-windows%20%7C%20macos%20%7C%20linux-lightgrey" /></a></p></td>
 </tr>
 </tbody>
 </table>
-<p>Utility library for collecting valid Python files recursively.</p>
-<ul class="simple">
-<li><p>Free software: MIT license</p></li>
+<p>Utility library dealing with Python files.</p>
+<dl class="simple">
+<dt><strong>Features</strong></dt><dd><ul class="simple">
+<li><p>Collect Python files recursively from a given directory</p></li>
+<li><p>Find the Python module name respective to a Python file</p></li>
 </ul>
+</dd>
+</dl>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pycollect</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install pycollect
 </pre></div>
 </div>
 </div>
 <div class="section" id="basic-usage">
 <h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">collector</span> <span class="o">=</span> <span class="n">PythonFileCollector</span><span class="p">()</span>
+<div class="section" id="collect-python-files">
+<h3>Collect Python files<a class="headerlink" href="#collect-python-files" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">collector</span> <span class="o">=</span> <span class="n">PythonFileCollector</span><span class="p">()</span>
 <span class="n">python_files</span> <span class="o">=</span> <span class="n">collector</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
 </pre></div>
+</div>
+<p>When no explicit directory is given the parent folder of caller’s file will be used.</p>
+<p>It is possible to define custom exclusion patterns. <a class="reference external" href="https://allrod5.github.io/pycollect/reference/pycollect.html#pycollect.PythonFileCollector">See the docs for more</a>.</p>
+</div>
+<div class="section" id="get-the-module-name-of-a-python-file">
+<h3>Get the module name of a Python file<a class="headerlink" href="#get-the-module-name-of-a-python-file" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">module_name</span> <span class="o">=</span> <span class="n">find_module_name</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As there can be multiple valid module names for a given file, by default the outermost
+module name is returned. The inverse behaviour can be enabled with the <code class="docutils literal notranslate"><span class="pre">innermost</span></code>
+parameter. <a class="reference external" href="https://allrod5.github.io/pycollect/reference/pycollect.html#pycollect.find_module_name">See the docs for more</a>.</p>
 </div>
 </div>
 <div class="section" id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
-<p>Complete docs: <a class="reference external" href="https://allrod5.github.io/pycollect/">https://allrod5.github.io/pycollect/</a></p>
+<p>See the complete docs at <a class="reference external" href="https://allrod5.github.io/pycollect/">allrod5.github.io/pycollect</a>.</p>
+<p><a class="reference external" href="https://github.com/allrod5/pycollect/tree/master/tests/integration">Integration tests</a>
+can be pretty helpful to understand pycollect usage more in-depth too.</p>
 <div class="section" id="see-also">
 <h3>See also<a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://allrod5.github.io/pycollect/contributing.html">CONTRIBUTING</a></p></li>
-<li><p><a class="reference external" href="https://allrod5.github.io/pycollect/changelog.html">CHANGELOG</a></p></li>
-<li><p><a class="reference external" href="https://allrod5.github.io/pycollect/authors.html">AUTHORS</a></p></li>
+<li><p><a class="reference external" href="https://allrod5.github.io/pycollect/contributing.html">CONTRIBUTING</a>: Bug reports, feature requests, documentation &amp; pull requests.</p></li>
+<li><p><a class="reference external" href="https://allrod5.github.io/pycollect/changelog.html">CHANGELOG</a>: See what’s changed in each version.</p></li>
+<li><p><a class="reference external" href="https://allrod5.github.io/pycollect/authors.html">AUTHORS</a>: Know who’s behind the project.</p></li>
 </ul>
 </div>
 </div>
@@ -169,7 +184,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Rodrigo Martins de Oliveira.
-      Last updated on Feb 29, 2020.
+      Last updated on Mar 10, 2020.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.3.
     </div>
   </body>

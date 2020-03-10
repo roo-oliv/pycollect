@@ -52,33 +52,60 @@
 <span class="target" id="module-pycollect"></span><dl class="class">
 <dt id="pycollect.PythonFileCollector">
 <em class="property">class </em><code class="sig-prename descclassname">pycollect.</code><code class="sig-name descname">PythonFileCollector</code><span class="sig-paren">(</span><em class="sig-param">use_regex_patterns: bool = False</em>, <em class="sig-param">additional_file_exclusion_patterns: Iterable[str] = None</em>, <em class="sig-param">additional_dir_exclusion_patterns: Iterable[str] = None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pycollect/python_file_collector.html#PythonFileCollector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycollect.PythonFileCollector" title="Permalink to this definition">¶</a></dt>
-<dd><p>PythonFileCollector provides method “collect” to collect files
+<dd><p>PythonFileCollector provides method <a class="reference internal" href="#pycollect.PythonFileCollector.collect" title="pycollect.PythonFileCollector.collect"><code class="xref py py-meth docutils literal notranslate"><span class="pre">collect()</span></code></a> to collect files
 while applying exclusion patterns to files and directories.</p>
 <p>Exclusion patterns are in respect to file and directory names only, NOT taking
 into account the absolute nor the relative file or directory path.</p>
-<p>When not using regex patterns, a single wildcard, “*”, can be used anywhere in
+<p>When not using regex patterns, a single wildcard, <code class="docutils literal notranslate"><span class="pre">*</span></code>, can be used anywhere in
 a pattern to filter names “starting with” and/or “ending with”. Also, a single
-exclamation mark, “!”, can be used at the beginning of the pattern to negate it.
-These only applies when :param use_regex_patterns: is False.</p>
-<p>Notice that using regex patterns may be slower.</p>
+exclamation mark, <code class="docutils literal notranslate"><span class="pre">!</span></code>, can be used at the beginning of the pattern to negate it.
+These only applies when the parameter <code class="docutils literal notranslate"><span class="pre">use_regex_patterns</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Using regex patterns may be slower as it consumes more CPU.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>use_regex_patterns</strong> – (default: False) flag to indicate whether or not to use regex to match
-patterns. When this flag it set to False the PythonFileCollector._WILDCARD
-(default: “*”) character is interpreted as wildcard and patterns starting
-with the PythonFileCollector._NEGATION (default: “!”) character are negated.</p></li>
-<li><p><strong>additional_file_exclusion_patterns</strong> – (default: None) additional patterns to filter out of collection files. In
+<li><p><strong>use_regex_patterns</strong> – (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>) flag to indicate whether or not to use regex to match
+patterns. When this flag it set to <code class="docutils literal notranslate"><span class="pre">False</span></code> the <code class="docutils literal notranslate"><span class="pre">*</span></code> character is interpreted
+as wildcard and patterns starting with the <code class="docutils literal notranslate"><span class="pre">!</span></code> character are negated.</p></li>
+<li><p><strong>additional_file_exclusion_patterns</strong> – (default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) additional patterns to filter out of collection files. In
 addition to the PythonFileCollector._DEFAULT_FILE_EXCLUSION_PATTERNS or
 PythonFileCollector._DEFAULT_FILE_EXCLUSION_REGEX_PATTERNS any file that
 matches these patterns will be excluded from collection.</p></li>
-<li><p><strong>additional_dir_exclusion_patterns</strong> – (default: None) additional patterns to filter out of collection directories.
+<li><p><strong>additional_dir_exclusion_patterns</strong> – (default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) additional patterns to filter out of collection directories.
 In addition to the PythonFileCollector._DEFAULT_DIR_EXCLUSION_PATTERNS or
 PythonFileCollector._DEFAULT_DIR_EXCLUSION_REGEX_PATTERNS any directory that
 matches these patterns will be excluded from collection.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="attribute">
+<dt id="pycollect.PythonFileCollector.DEFAULT_DIR_EXCLUSION_PATTERNS">
+<code class="sig-name descname">DEFAULT_DIR_EXCLUSION_PATTERNS</code><em class="property"> = {'*~', '.*', '__pycache__', 'bin', 'build', 'develop-eggs', 'dist', 'eggs', 'htmlcov', 'parts', 'pyvenv*', 'sdist', 'tmp', 'var', 'venv*', 'wheelhouse'}</em><a class="headerlink" href="#pycollect.PythonFileCollector.DEFAULT_DIR_EXCLUSION_PATTERNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default set of directory exclusion patterns.</p>
+<p>Are excluded by default:</p>
+<ol class="arabic simple">
+<li><p>Directories starting with a dot (<code class="docutils literal notranslate"><span class="pre">.</span></code>);</p></li>
+<li><p>Directories ending with a tilde (<code class="docutils literal notranslate"><span class="pre">~</span></code>).</p></li>
+<li><p>Directories with common names indicating auto-generated content, binaries,
+cache and temporary content (e.g., <code class="docutils literal notranslate"><span class="pre">__pycache__</span></code>, <code class="docutils literal notranslate"><span class="pre">tmp</span></code>, <code class="docutils literal notranslate"><span class="pre">dist</span></code>)</p></li>
+</ol>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pycollect.PythonFileCollector.DEFAULT_FILE_EXCLUSION_PATTERNS">
+<code class="sig-name descname">DEFAULT_FILE_EXCLUSION_PATTERNS</code><em class="property"> = {'!*.py', '.*', '~*'}</em><a class="headerlink" href="#pycollect.PythonFileCollector.DEFAULT_FILE_EXCLUSION_PATTERNS" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default set of file exclusion patterns.</p>
+<p>Are excluded by default:</p>
+<ol class="arabic simple">
+<li><p>Files without the <code class="docutils literal notranslate"><span class="pre">.py</span></code> extension;</p></li>
+<li><p>Files starting with a dot (<code class="docutils literal notranslate"><span class="pre">.</span></code>); and</p></li>
+<li><p>Files starting with a tilde (<code class="docutils literal notranslate"><span class="pre">~</span></code>).</p></li>
+</ol>
+</dd></dl>
+
 <dl class="method">
 <dt id="pycollect.PythonFileCollector.collect">
 <code class="sig-name descname">collect</code><span class="sig-paren">(</span><em class="sig-param">search_path: Optional[str] = None</em>, <em class="sig-param">recursion_limit: Optional[int] = None</em>, <em class="sig-param">follow_symlinks: bool = True</em><span class="sig-paren">)</span> &#x2192; Set[posix.DirEntry]<a class="reference internal" href="../_modules/pycollect/python_file_collector.html#PythonFileCollector.collect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycollect.PythonFileCollector.collect" title="Permalink to this definition">¶</a></dt>
@@ -188,7 +215,7 @@ filepath.</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Rodrigo Martins de Oliveira.
-      Last updated on Feb 29, 2020.
+      Last updated on Mar 10, 2020.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.3.
     </div>
   </body>
