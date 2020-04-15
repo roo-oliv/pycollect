@@ -53,7 +53,7 @@ github-pages:
 	make html
 	cp -a build/html/. docs
 
-CURRENT_VERSION = 0.2.2
+CURRENT_VERSION = 0.2.3
 
 .PHONY: bump-patch-version
 bump-patch-version:
