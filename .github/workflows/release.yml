@@ -1,6 +1,8 @@
 name: release
 
-on: release
+on:
+  release:
+    types: published
 
 jobs:
   release:
@@ -8,10 +10,11 @@ jobs:
 
     steps:
     - id: checkout_action
-      uses: actions/checkout@v1
-    - name: Publish release
-      uses: mariamrf/py-package-publish-action@v0.0.2
+      uses: actions/checkout@master
+    - name: Publish new release to PyPI
+      uses: mariamrf/py-package-publish-action@v1.0.0
+      with:
+        python_version: 3.7
       env:
-        PYTHON_VERSION: 3.7
         TWINE_USERNAME: ${{ secrets.pypi_username }}
         TWINE_PASSWORD: ${{ secrets.pypi_password }}

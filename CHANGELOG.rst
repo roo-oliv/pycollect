@@ -1,10 +1,19 @@
 Changelog
 =========
 
+0.2.3 (2020-04-14)
+------------------
+
+* Adds support for Windows case insensitivity
+* Adds official support for Python 3.8
+* States official support for PathLike objects in the ``find_module_name`` function
+* Fixes and updates the release workflow in GitHub Actions
+* Bumps pycollect from 0.2.2 to 0.2.3
+
 0.2.2 (2020-02-29)
 ------------------
 
-* Lift __init__.py requirement for considering a path as importable
+* Lift ``__init__.py`` requirement for considering a path as importable
 
 0.2.1 (2020-02-29)
 ------------------

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>pycollect.module_finder &#8212; pycollect 0.2.2 documentation</title>
+    <title>pycollect.module_finder &#8212; pycollect 0.2.3 documentation</title>
     <link rel="stylesheet" href="../../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
@@ -28,7 +28,7 @@
       <h3>Navigation</h3>
       <ul>
         <li class="responsive-menu"><a href="#sidebar-anchor" title="Navigation">&#9776;</a></li>
-        <li><a href="../../index.html">pycollect-0.2.2</a> &#187;</li>
+        <li><a href="../../index.html">pycollect-0.2.3</a> &#187;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -47,20 +47,25 @@
             
   <h1>Source code for pycollect.module_finder</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">DirEntry</span>
-<span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">basename</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">splitext</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">DirEntry</span><span class="p">,</span> <span class="n">PathLike</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">basename</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">splitext</span><span class="p">,</span> <span class="n">normcase</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 
+<span class="k">def</span> <span class="nf">path_is_in_pythonpath</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">normcase</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">normcase</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span> <span class="o">==</span> <span class="n">path</span> <span class="k">for</span> <span class="n">sp</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="find_module_name"><a class="viewcode-back" href="../../reference/pycollect.html#pycollect.find_module_name">[docs]</a><span class="k">def</span> <span class="nf">find_module_name</span><span class="p">(</span>
-    <span class="n">filepath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DirEntry</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">innermost</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">filepath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">DirEntry</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">PathLike</span><span class="p">],</span> <span class="n">innermost</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Utility function to find the Python module name of a python file.</span>
 
 <span class="sd">    :param filepath:</span>
-<span class="sd">        The absolute filepath as a DirEntry object or path string.</span>
+<span class="sd">        The absolute filepath as a DirEntry object, path string or PathLike object.</span>
 <span class="sd">    :param innermost:</span>
 <span class="sd">        (default: False) By default the outermost possible module name is returned.</span>
 <span class="sd">        When this flag is set to True, the first found, innermost possible module name</span>
@@ -77,7 +82,7 @@
     <span class="n">full_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span>
     <span class="n">at_root</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">while</span> <span class="ow">not</span> <span class="n">at_root</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">full_path</span><span class="p">)</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">path_is_in_pythonpath</span><span class="p">(</span><span class="n">full_path</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">innermost</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">module_name</span>
             <span class="k">else</span><span class="p">:</span>
@@ -134,8 +139,8 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Rodrigo Martins de Oliveira.
-      Last updated on Mar 10, 2020.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.3.
+      Last updated on Apr 14, 2020.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
     </div>
   </body>
 </html>

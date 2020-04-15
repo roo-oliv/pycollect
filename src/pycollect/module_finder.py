@@ -1,18 +1,23 @@
 import sys
-from os import DirEntry
-from os.path import basename, dirname, splitext
+from os import DirEntry, PathLike
+from os.path import basename, dirname, splitext, normcase
 from pathlib import Path
 from typing import Optional, Union
 
 
+def path_is_in_pythonpath(path):
+    path = normcase(path)
+    return any(normcase(sp) == path for sp in sys.path)
+
+
 def find_module_name(
-    filepath: Union[DirEntry, str], innermost: bool = False
+    filepath: Union[DirEntry, str, PathLike], innermost: bool = False
 ) -> Optional[str]:
     """
     Utility function to find the Python module name of a python file.
 
     :param filepath:
-        The absolute filepath as a DirEntry object or path string.
+        The absolute filepath as a DirEntry object, path string or PathLike object.
     :param innermost:
         (default: False) By default the outermost possible module name is returned.
         When this flag is set to True, the first found, innermost possible module name
@@ -29,7 +34,7 @@ def find_module_name(
     full_path = Path(dirname(filepath))
     at_root = False
     while not at_root:
-        if str(full_path) in sys.path:
+        if path_is_in_pythonpath(full_path):
             if innermost:
                 return module_name
             else:

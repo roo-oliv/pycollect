@@ -24,7 +24,7 @@ def read(*names, **kwargs):
 
 setup(
     name="pycollect",
-    version="0.2.2",
+    version="0.2.3",
     license="MIT license",
     description="Utility library to collect files recursively",
     long_description="%s\n%s"
@@ -52,6 +52,7 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Topic :: Utilities",
@@ -62,7 +63,7 @@ setup(
         "Issue Tracker": "https://github.com/allrod5/pycollect/issues",
     },
     keywords=["file", "py", "traversal", "directory"],
-    python_requires=">=3.5",
+    python_requires=">=3.6",
     install_requires=[
         # eg: 'aspectlib==1.1.1', 'six>=1.7',
     ],
