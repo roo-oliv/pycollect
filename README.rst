@@ -1,6 +1,7 @@
-========
-Overview
-========
+.. _pycollect:
+
+pycollect
+=========
 
 .. start-badges
 
@@ -85,7 +86,7 @@ Collect Python files
 
 When no explicit directory is given the parent folder of caller's file will be used.
 
-It is possible to define custom exclusion patterns. `See the docs for more <https://allrod5.github.io/pycollect/reference/pycollect.html#pycollect.PythonFileCollector>`_.
+It is possible to define custom exclusion patterns. `See the docs for more <https://allrod5.github.io/pycollect/reference/pycollect.html#pycollect.PythonFileCollector>`__.
 
 Get the module name of a Python file
 ------------------------------------
@@ -96,19 +97,19 @@ Get the module name of a Python file
 
 As there can be multiple valid module names for a given file, by default the outermost
 module name is returned. The inverse behaviour can be enabled with the ``innermost``
-parameter. `See the docs for more <https://allrod5.github.io/pycollect/reference/pycollect.html#pycollect.find_module_name>`_.
+parameter. `See the docs for more <https://allrod5.github.io/pycollect/reference/pycollect.html#pycollect.find_module_name>`__.
 
 Documentation
 =============
 
-See the complete docs at `allrod5.github.io/pycollect <https://allrod5.github.io/pycollect/>`_.
+See the complete docs at `allrod5.github.io/pycollect <https://allrod5.github.io/pycollect/>`__.
 
-`Integration tests <https://github.com/allrod5/pycollect/tree/master/tests/integration>`_
+`Integration tests <https://github.com/allrod5/pycollect/tree/master/tests/integration>`__
 can be pretty helpful to understand pycollect usage more in-depth too.
 
 See also
 --------
 
-* `CONTRIBUTING <https://allrod5.github.io/pycollect/contributing.html>`_: Bug reports, feature requests, documentation & pull requests.
-* `CHANGELOG <https://allrod5.github.io/pycollect/changelog.html>`_: See what's changed in each version.
-* `AUTHORS <https://allrod5.github.io/pycollect/authors.html>`_: Know who's behind the project.
+* `CONTRIBUTING <https://allrod5.github.io/pycollect/contributing.html>`__: Bug reports, feature requests, documentation & pull requests.
+* `CHANGELOG <https://allrod5.github.io/pycollect/changelog.html>`__: See what's changed in each version.
+* `AUTHORS <https://allrod5.github.io/pycollect/authors.html>`__: Know who's behind the project.
